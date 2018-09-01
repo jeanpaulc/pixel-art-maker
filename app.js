@@ -44,10 +44,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let indText = document.createElement('h1')
     indText.setAttribute('id', `indText`)
-    indText.innerText = "Color"
+    indText.innerText = "COLOR PICKED"
 
     let indSwatch = document.createElement('div')
-    indSwatch.setAttribute('id', `indSwatch`)
+    indSwatch.setAttribute('id', 'indSwatch')
+    indSwatch.setAttribute('class', 'white')
 
     body.appendChild(indicator)
     indicator.appendChild(indText)
@@ -63,15 +64,27 @@ document.addEventListener("DOMContentLoaded", function() {
     color = event.target.classList[1]
     console.log("Color Picked: ",color);
 
-    if (color === undefined){
-      color = "white"
-      return
-    }
-    return
-  }
+    color = color || "white"
 
+    test()
+  }
+  /* *** EVENT LISTENER: COLOR PICKER *** */
   let colorPallet = document.getElementById('pallet')
-  colorPallet.addEventListener('click', colorPicked) //<-- Color Picker
+  colorPallet.addEventListener('click', colorPicked)
+
+
+  function test() {
+    let indicatorChange = document.querySelector('#indSwatch')
+
+    if (indicatorChange.classList.contains('white') ) {
+      indicatorChange.classList.replace(`white`, `${color}`)
+    }
+    if (indicatorChange.classList[0] !== color) {
+      indicatorChange.classList.replace(indicatorChange.classList[0], `${color}`)
+    }
+
+    console.log(indicatorChange);
+  }
 
   function paintPixel(event) {
     console.log("Event.target: ", event.target);
@@ -81,14 +94,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (color === undefined){
       return
     }
-    // if (pxSelect.classList.contains(color)) {
-    //   pxSelect.classList.replace(`${color}`, `${color}`)
-    //   console.log(`pixel color is: ${color}`)
-    // }
     // If the current pixel is white (blank) change it to the picked color
     if (pxSelect.classList.contains('white')) {
       pxSelect.classList.replace('white', `${color}`)
       console.log(`pixel color is: ${color}`)
+    }
+    else if (pxSelect.classList[1]) {
+      pxSelect.classList.replace(pxSelect.classList[1], `${color}`)
     }
     // If the current pixel is colored, if clicked again change it to white (blank)
     else {
