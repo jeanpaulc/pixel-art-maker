@@ -31,14 +31,12 @@ document.addEventListener("DOMContentLoaded", function() {
     let pallet = document.createElement('div')
     pallet.setAttribute('id', "pallet")
     body.appendChild(pallet)
-
     //distribute paint swatch colors to pallet based on input array
     for (let i = 0; i < colors.length; i++) {
       let paint = document.createElement('div')
       paint.setAttribute('class', `paint ${colors[i]}`)
       pallet.appendChild(paint)
     }
-    // create text and a div to show which color has been picked
     let indicator = document.createElement('div')
     indicator.setAttribute('id', `indicator`)
 
@@ -54,62 +52,48 @@ document.addEventListener("DOMContentLoaded", function() {
     indicator.appendChild(indText)
     indicator.appendChild(indSwatch)
   }
-
   let color;
   function colorPicked(event) {
     console.log("EVENT.TARGET= ", event.target);
-    // console.log("THIS= ", this);
-
     //color from the div's paintswatch class-list
     color = event.target.classList[1]
-    console.log("Color Picked: ",color);
-
+    // console.log("Color Picked: ",color);
+    // This prevents pixels from having their color class removed
     color = color || "white"
-
-    test()
+    indicator()
   }
-  /* *** EVENT LISTENER: COLOR PICKER *** */
+  // EVENT LISTENER: COLOR PICKER
   let colorPallet = document.getElementById('pallet')
   colorPallet.addEventListener('click', colorPicked)
-
-
-  function test() {
+  // After a color has been selected from the color pallet, this function updates the color indicator swatch background
+  function indicator() {
     let indicatorChange = document.querySelector('#indSwatch')
-
     if (indicatorChange.classList.contains('white') ) {
       indicatorChange.classList.replace(`white`, `${color}`)
     }
     if (indicatorChange.classList[0] !== color) {
       indicatorChange.classList.replace(indicatorChange.classList[0], `${color}`)
     }
-
-    console.log(indicatorChange);
+    // console.log("Indicator Color: ",indicatorChange);
   }
-
+  // After a color has been selected from the color pallet, this function takes the updated color variable and sets a selected pixel's background to that color
   function paintPixel(event) {
-    console.log("Event.target: ", event.target);
-    // console.log("This: ", this);
-    pxSelect = event.target
-
-    if (color === undefined){
-      return
-    }
+    // console.log("Event.target: ", event.target);
+    let pxSelect = event.target
+    // This acts as a guard to prevent pixels from having their color class removed
+    if (color === undefined) { return }
     // If the current pixel is white (blank) change it to the picked color
     if (pxSelect.classList.contains('white')) {
       pxSelect.classList.replace('white', `${color}`)
       console.log(`pixel color is: ${color}`)
     }
+    // If the current pixel color != picked color, change to picked color
     else if (pxSelect.classList[1]) {
       pxSelect.classList.replace(pxSelect.classList[1], `${color}`)
     }
-    // If the current pixel is colored, if clicked again change it to white (blank)
-    else {
-      pxSelect.classList.replace(`${color}`, `white`)
-      console.log(`pixel color is: white`)
-    }
+    // TODO If the current pixel is colored, if clicked again change it to white (blank)
   }
-
+  // EVENT LISTENER: Paint Pixel
   let grid = document.querySelector('table')
   grid.addEventListener('click', paintPixel)
-
 })
